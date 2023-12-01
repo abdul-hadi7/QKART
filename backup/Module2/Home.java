@@ -6,7 +6,6 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -30,7 +29,6 @@ public class Home {
             WebElement logout_button = driver.findElement(By.className("MuiButton-text"));
             logout_button.click();
 
-            // SLEEP_STMT_10: Wait for Logout to complete
             // Wait for Logout to Complete
             Thread.sleep(3000);
 
@@ -53,11 +51,7 @@ public class Home {
                     .findElement(By.xpath("//input[@placeholder='Search for items/categories']"));
             box.clear();
             box.sendKeys(product);
-            //Thread.sleep(5000);
-            ExpectedCondition con1 = ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[text()=' No products found ']"));
-            ExpectedCondition con2 = ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='MuiCardContent-root css-1qw96cp']"));
-            WebDriverWait wait = new WebDriverWait(driver, 3);
-            wait.until(ExpectedConditions.or(con1,con2));
+            Thread.sleep(5000);
             return true;
         } catch (Exception e) {
             System.out.println("Error while searching for a product: " + e.getMessage());
@@ -75,7 +69,7 @@ public class Home {
             // Find all webelements corresponding to the card content section of each of
             // search results
             searchResults = driver.findElements(
-                    By.xpath("//div[@class='MuiCardContent-root css-1qw96cp']"));
+                    By.xpath("//*[@id='root']/div/div/div[3]/div/div[2]/div/div/div[1]"));
             return searchResults;
         } catch (Exception e) {
             System.out.println("There were no search results: " + e.getMessage());
@@ -93,7 +87,7 @@ public class Home {
             // TODO: CRIO_TASK_MODULE_TEST_AUTOMATION - TEST CASE 03: MILESTONE 1
             // Check the presence of "No products found" text in the web page. Assign status
             // = true if the element is *displayed* else set status = false
-            if (driver.findElement(By.xpath("//h4[text()=' No products found ']"))
+            if (driver.findElement(By.xpath("/html/body/div/div/div/div[3]/div/div[2]/div/h4"))
                     .getText().equals("No products found")) {
                 status = true;
             } else {
@@ -110,9 +104,10 @@ public class Home {
      */
     public Boolean addProductToCart(String productName) {
         try {
+            // TODO: CRIO_TASK_MODULE_TEST_AUTOMATION - TEST CASE 05: MILESTONE 4
             /*
-             * Iterate through each product on the page to find the WebElement corresponding
-             * to the matching productName
+             * Iterate through each product on the page to find the WebElement corresponding to the
+             * matching productName
              * 
              * Click on the "ADD TO CART" button for that element
              * 
@@ -182,27 +177,14 @@ public class Home {
         if (quantity> currentQuantity){
         WebElement plusButton = parentElement.findElement(By.xpath( ".//*[@data-testid='AddOutlinedIcon']"));
         plusButton.click();
-        WebDriverWait wait = new WebDriverWait(driver, 3);
-        wait.until(ExpectedConditions.textToBePresentInElement(
-            parentElement.findElement(By.xpath(".//div[@data-testid='item-qty']")),
-            String.valueOf(currentQuantity+1)));
-
-
-
         }
         else if (quantity < currentQuantity) {
         WebElement minusButton=parentElement.findElement(By.xpath( ".//*[@data-testid='RemoveOutlinedIcon']"));
         minusButton.click();
-        WebDriverWait wait = new WebDriverWait(driver, 3);
-        wait.until(ExpectedConditions.textToBePresentInElement(
-            parentElement.findElement(By.xpath(".//div[@data-testid='item-qty']")),
-            String.valueOf(currentQuantity-1)));
-
-
         }else if(quantity==currentQuantity){
 	        break;
         }
-        //Thread.sleep(3000);
+        Thread.sleep(3000);
         }
         }
         }
